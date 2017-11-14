@@ -53,8 +53,12 @@ def _find(package):
 
     if not ret and not err:
         return [package, True]
-    else:
 
+    # if this isn't Linux, assume person know's what they're doing
+    elif platform.system() == 'FreeBSD':
+        return [package, True]
+
+    elif platform.system() == 'Linux':
         #Get distro name
         distro = platform.dist()[0].lower()
 
@@ -83,6 +87,11 @@ def _find(package):
             return [package, True]
         else:
             return [package, False]
+
+    # assume some other OS
+    else:
+        sys.stderr.write('Unsupported distribution! You will have to resolve missing requirements yourself.')
+        sys.exit(1)
 
 
 def exec_command(command):
